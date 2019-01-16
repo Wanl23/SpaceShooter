@@ -15,7 +15,8 @@ public class SpaceShooter extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("spaceBackground.jpg");
+		img = new Texture("spaceBack.jpg");
+		
 		textureRegion = new TextureRegion(img, 0, 0, 150, 150);
 	}
 
