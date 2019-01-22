@@ -16,14 +16,20 @@ public class MenuScreen extends Base2dScreen {
     Vector2 position;
     Vector2 speed;
     Vector2 tochDownPosition;
+    Vector2 buf;
+    private static final float V_LEN = 10.5f;
 
     @Override
     public void show() {
         super.show();
         batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
+        batch.getProjectionMatrix().idt();
         background = new Texture("spaceBack.jpg");
         position = new Vector2(0, 0);
+        speed = new Vector2(0,0);
+        tochDownPosition = new Vector2(0, 0);
+        buf = new Vector2(0, 0);
 
     }
 
@@ -34,17 +40,18 @@ public class MenuScreen extends Base2dScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         batch.draw(background, 0, 0);
-        batch.draw(img, position.x, position.y);
+        batch.draw(img, -1f, -1f, 2f, 2f);
         batch.end();
-        if (tochDownPosition != null) {
-            if ((int)tochDownPosition.x != (int)position.x && (int)tochDownPosition.y != (int)position.y) {
-                position.add(speed);
-            }
+        buf.set(tochDownPosition);
+        if (buf.sub(position).len() > V_LEN) {
+            position.add(speed);
+        } else {
+            position.set(tochDownPosition);
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) position.x -= 200 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) position.x += 200 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) position.y -= 200 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) position.y += 200 * Gdx.graphics.getDeltaTime();
+//        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) position.x -= 200 * Gdx.graphics.getDeltaTime();
+//        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) position.x += 200 * Gdx.graphics.getDeltaTime();
+//        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) position.y -= 200 * Gdx.graphics.getDeltaTime();
+//        if(Gdx.input.isKeyPressed(Input.Keys.UP)) position.y += 200 * Gdx.graphics.getDeltaTime();
     }
 
     @Override
@@ -56,8 +63,8 @@ public class MenuScreen extends Base2dScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        tochDownPosition = new Vector2(screenX, (Gdx.graphics.getHeight() - screenY));
-        speed = new Vector2((tochDownPosition.x - position.x) / 30, (tochDownPosition.y - position.y) / 30);
+        tochDownPosition.set(screenX, Gdx.graphics.getHeight() - screenY);
+        speed.set(tochDownPosition.cpy().sub(position).setLength(V_LEN));
         return super.touchDown(screenX, screenY, pointer, button);
     }
 }
