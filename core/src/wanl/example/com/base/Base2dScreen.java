@@ -23,10 +23,8 @@ public class Base2dScreen implements Screen, InputProcessor {
     private Matrix3 screenToWorld;
 
     protected Vector2 touch;
-    protected Vector2 buf;
-    protected Vector2 position;
-    protected Vector2 v;
-    private static final float CONST_LENGTH = 0.01f;
+
+
 
     @Override
     public void show() {
@@ -41,19 +39,12 @@ public class Base2dScreen implements Screen, InputProcessor {
 
         touch = new Vector2();
         this.screenToWorld = new Matrix3();
-        position = new Vector2(-0.5f, -0.5f);
-        buf = new Vector2(0, 0);
-        v = new Vector2();
+
     }
 
     @Override
     public void render(float delta) {
-        buf.set(touch);
-        if (buf.sub(position).len() > CONST_LENGTH) {
-            position.add(v);
-        } else {
-            position.set(touch);
-        }
+
 
     }
 
@@ -104,7 +95,6 @@ public class Base2dScreen implements Screen, InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
-        v.set(touch.cpy().sub(position).setLength(CONST_LENGTH));
         touchDown(touch, pointer);
         return false;
     }
@@ -117,7 +107,6 @@ public class Base2dScreen implements Screen, InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
-
         touchUp(touch, pointer);
         return false;
     }

@@ -11,16 +11,25 @@ import wanl.example.com.base.Base2dScreen;
 
 public class MenuScreen extends Base2dScreen {
 
+    private static final float CONST_LENGTH = 0.01f;
     Texture img;
     Texture background;
 
+    protected Vector2 buf;
 
+    Vector2 position;
+    Vector2 v;
+    Vector2 touch;
 
     @Override
     public void show() {
         super.show();
         img = new Texture("badlogic.jpg");
         background = new Texture("spaceBack.jpg");
+        buf = new Vector2();
+        position = new Vector2(-0.5f, -0.5f);
+        v = new Vector2(0, 0);
+        touch = new Vector2();
     }
 
     @Override
@@ -32,6 +41,14 @@ public class MenuScreen extends Base2dScreen {
         batch.draw(background, -0.5f, -0.5f, 1f, 1f);
         batch.draw(img, position.x, position.y, 0.5f, 0.5f);
         batch.end();
+
+        buf.set(touch);
+        if (buf.sub(position).len() > 0.1f) {
+            position.add(v);
+        } else {
+            position.set(touch);
+        }
+
     }
 
     @Override
@@ -47,6 +64,10 @@ public class MenuScreen extends Base2dScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
+        this.touch = touch;
+        v.set(touch.cpy().sub(position)).setLength(0.1f);
         return super.touchDown(touch, pointer);
     }
+
+
 }
