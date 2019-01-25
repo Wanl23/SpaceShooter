@@ -24,8 +24,6 @@ public class Base2dScreen implements Screen, InputProcessor {
 
     protected Vector2 touch;
 
-
-
     @Override
     public void show() {
 
@@ -39,13 +37,10 @@ public class Base2dScreen implements Screen, InputProcessor {
 
         touch = new Vector2();
         this.screenToWorld = new Matrix3();
-
     }
 
     @Override
     public void render(float delta) {
-
-
     }
 
     @Override
@@ -61,6 +56,10 @@ public class Base2dScreen implements Screen, InputProcessor {
         MatrixUtils.calcTransitionMatrix(worldToGl, worldBounds, glBounds);
         batch.setProjectionMatrix(worldToGl);
         MatrixUtils.calcTransitionMatrix(screenToWorld, screenBounds, worldBounds);
+        resize(worldBounds);
+    }
+
+    public void resize(Rect worldBounds) {
     }
 
     @Override
@@ -100,7 +99,6 @@ public class Base2dScreen implements Screen, InputProcessor {
     }
 
     public boolean touchDown(Vector2 touch, int pointer) {
-        System.out.println(new Vector2(touch.x, touch.y).len());
         return false;
     }
 
@@ -122,7 +120,7 @@ public class Base2dScreen implements Screen, InputProcessor {
         return false;
     }
 
-    public boolean touchDragged(Vector2 tousch, int pointer) {
+    public boolean touchDragged(Vector2 touch, int pointer) {
         return false;
     }
 
