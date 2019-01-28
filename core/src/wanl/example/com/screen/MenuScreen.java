@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
-import wanl.example.com.Star2dGame;
 import wanl.example.com.base.Base2dScreen;
 import wanl.example.com.math.Rect;
 import wanl.example.com.sprites.Background;
@@ -18,7 +16,11 @@ import wanl.example.com.sprites.menu.Play;
 
 public class MenuScreen extends Base2dScreen {
 
+    public MenuScreen(Game game) {
+        this.game = game;
+    }
 
+    private Game game;
 
     private TextureAtlas atlas;
     private Texture bg;
@@ -38,7 +40,7 @@ public class MenuScreen extends Base2dScreen {
         for (int i = 0; i < star.length; i++) {
             star[i] = new Star(atlas);
         }
-        play = new Play(atlas);
+        play = new Play(atlas, game);
         exit = new Exit(atlas);
     }
 
@@ -53,8 +55,6 @@ public class MenuScreen extends Base2dScreen {
         for (int i = 0; i < star.length; i++) {
             star[i].update(delta);
         }
-        play.update(delta);
-        exit.update(delta);
     }
 
     public void draw() {

@@ -13,7 +13,7 @@ public class Exit extends ScaledTouchUpButton {
 
     public Exit(TextureAtlas atlas) {
         super(atlas.findRegion("btExit"));
-        setHeightProportion(0.2f);
+        setHeightProportion(0.15f);
     }
     @Override
     void action() {
@@ -22,7 +22,6 @@ public class Exit extends ScaledTouchUpButton {
 
     @Override
     public void draw(SpriteBatch batch) {
-
         super.draw(batch);
     }
 
@@ -39,7 +38,8 @@ public class Exit extends ScaledTouchUpButton {
 
     @Override
     public void resize(Rect worldBounds) {
-        pos.set(0.2f, -0.35f);
+        setBottom(worldBounds.getBottom() + 0.05f);
+        setLeft(worldBounds.getLeft() + 0.04f);
     }
 
 }

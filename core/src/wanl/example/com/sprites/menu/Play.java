@@ -4,16 +4,16 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-
-import wanl.example.com.Star2dGame;
 import wanl.example.com.math.Rect;
 import wanl.example.com.screen.GameScreen;
-import wanl.example.com.screen.MenuScreen;
 
 public class Play extends ScaledTouchUpButton {
 
-    public Play(TextureAtlas atlas) {
+    private Game game;
+
+    public Play(TextureAtlas atlas, Game game) {
         super(atlas.findRegion("btPlay"));
+        this.game = game;
         setHeightProportion(0.2f);
     }
 
@@ -24,6 +24,7 @@ public class Play extends ScaledTouchUpButton {
 
     @Override
     void action() {
+        game.setScreen(new GameScreen());
     }
 
     public boolean touchDown(Vector2 touch, int pointer) {
@@ -37,6 +38,7 @@ public class Play extends ScaledTouchUpButton {
 
     @Override
     public void resize(Rect worldBounds) {
-        pos.set(-0.2f, -0.35f);
+        setBottom(worldBounds.getBottom() + 0.05f);
+        setRight(worldBounds.getRight() - 0.05f);
     }
 }

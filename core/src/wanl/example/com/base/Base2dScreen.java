@@ -69,7 +69,9 @@ public class Base2dScreen implements Screen, InputProcessor {
     public void resume() {}
 
     @Override
-    public void hide() {}
+    public void hide() {
+        dispose();
+    }
 
     @Override
     public void dispose() {

@@ -8,6 +8,6 @@ import wanl.example.com.screen.MenuScreen;
 public class Star2dGame extends Game {
     @Override
     public void create() {
-        setScreen(new MenuScreen());
+        setScreen(new MenuScreen(this));
     }
 }
