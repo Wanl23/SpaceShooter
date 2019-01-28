@@ -2,6 +2,7 @@ package wanl.example.com.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -26,6 +27,8 @@ public class MenuScreen extends Base2dScreen {
     private Texture bg;
     private Background background;
     private Star star[];
+
+    Music music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
     private Play play;
     private Exit exit;
 
@@ -40,6 +43,7 @@ public class MenuScreen extends Base2dScreen {
         for (int i = 0; i < star.length; i++) {
             star[i] = new Star(atlas);
         }
+        music.play();
         play = new Play(atlas, game);
         exit = new Exit(atlas);
     }
