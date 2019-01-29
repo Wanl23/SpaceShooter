@@ -5,15 +5,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import wanl.example.com.math.Rect;
+import wanl.example.com.utils.Regions;
 
 public class Sprite extends Rect {
-
     protected float angle;
     protected float scale = 1f;
     protected TextureRegion[] regions;
     protected int frame;
+    private boolean isDestroyed;
 
-    public Sprite(TextureRegion region){
+    public Sprite(TextureRegion region) {
         if(region == null){
             throw new NullPointerException("Create Sprite with null region");
         }
@@ -21,7 +22,17 @@ public class Sprite extends Rect {
         regions[0] = region;
     }
 
-    public void draw(SpriteBatch batch){
+    public Sprite(TextureRegion region, int rows, int cols, int frames){
+        if(region == null) {
+            throw new NullPointerException("Create Sprite with null region");
+        }
+        this.regions = Regions.split(region, rows, cols, frames);
+    }
+
+    public Sprite() {
+    }
+
+    public void draw(SpriteBatch batch) {
         batch.draw(
                 regions[frame],
                 getLeft(), getBottom(),
@@ -68,5 +79,17 @@ public class Sprite extends Rect {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public void destroy() {
+        this.isDestroyed = true;
+    }
+
+    public void flushDestroy() {
+        this.isDestroyed = false;
+    }
+
+    public boolean isDestroyed() {
+        return isDestroyed;
     }
 }

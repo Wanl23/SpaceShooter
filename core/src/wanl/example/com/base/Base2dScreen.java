@@ -26,15 +26,12 @@ public class Base2dScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
-
         batch = new SpriteBatch();
         Gdx.input.setInputProcessor(this) ;
         this.screenBounds = new Rect();
         this.worldBounds = new Rect();
         this.glBounds = new Rect(0, 0, 1f, 1f);
-
         this.worldToGl = new Matrix4();
-
         touch = new Vector2();
         this.screenToWorld = new Matrix3();
     }
