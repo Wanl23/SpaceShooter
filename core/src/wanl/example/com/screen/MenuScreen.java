@@ -10,21 +10,26 @@ import com.badlogic.gdx.math.Vector2;
 import wanl.example.com.base.Base2dScreen;
 
 public class MenuScreen extends Base2dScreen {
-    SpriteBatch batch;
+
+    private static final float CONST_LENGTH = 0.01f;
     Texture img;
     Texture background;
+
+    protected Vector2 buf;
+
     Vector2 position;
-    Vector2 speed;
-    Vector2 tochDownPosition;
+    Vector2 v;
+    Vector2 touch;
 
     @Override
     public void show() {
         super.show();
-        batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
         background = new Texture("spaceBack.jpg");
-        position = new Vector2(0, 0);
-
+        buf = new Vector2();
+        position = new Vector2(-0.5f, -0.5f);
+        v = new Vector2(0, 0);
+        touch = new Vector2();
     }
 
     @Override
@@ -33,31 +38,36 @@ public class MenuScreen extends Base2dScreen {
         Gdx.gl.glClearColor(1, 1, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        batch.draw(background, 0, 0);
-        batch.draw(img, position.x, position.y);
+        batch.draw(background, -0.5f, -0.5f, 1f, 1f);
+        batch.draw(img, position.x, position.y, 0.5f, 0.5f);
         batch.end();
-        if (tochDownPosition != null) {
-            if ((int)tochDownPosition.x != (int)position.x && (int)tochDownPosition.y != (int)position.y) {
-                position.add(speed);
-            }
+
+        buf.set(touch);
+        if (buf.sub(position).len() > 0.1f) {
+            position.add(v);
+        } else {
+            position.set(touch);
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) position.x -= 200 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) position.x += 200 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) position.y -= 200 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) position.y += 200 * Gdx.graphics.getDeltaTime();
+
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
         img.dispose();
         super.dispose();
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        tochDownPosition = new Vector2(screenX, (Gdx.graphics.getHeight() - screenY));
-        speed = new Vector2((tochDownPosition.x - position.x) / 30, (tochDownPosition.y - position.y) / 30);
-        return super.touchDown(screenX, screenY, pointer, button);
+    public void resize(int width, int height) {
+        super.resize(width, height);
     }
+
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer) {
+        this.touch = touch;
+        v.set(touch.cpy().sub(position)).setLength(0.1f);
+        return super.touchDown(touch, pointer);
+    }
+
+
 }
