@@ -7,8 +7,8 @@ import java.util.List;
 
 public abstract class SpritesPool<T extends Sprite> {
 
-    private List<T> activeObjects = new ArrayList<T>();
-    private List<T> freeObjects = new ArrayList<T>();
+    protected List<T> activeObjects = new ArrayList<T>();
+    protected List<T> freeObjects = new ArrayList<T>();
 
     protected abstract T newObject();
 
@@ -20,7 +20,6 @@ public abstract class SpritesPool<T extends Sprite> {
             objects = freeObjects.remove(freeObjects.size() - 1);
         }
         activeObjects.add(objects);
-        System.out.println("active/free: " + activeObjects.size() + " / " + freeObjects.size());
         return objects;
     }
 
@@ -52,7 +51,6 @@ public abstract class SpritesPool<T extends Sprite> {
         activeObjects.remove(object);
         freeObjects.add(object);
         object.flushDestroy();
-        System.out.println("active/free: " + activeObjects.size() + " / " + freeObjects.size());
     }
 
     public List<T> getActiveObjects() {

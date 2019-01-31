@@ -4,29 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
-import wanl.example.com.base.Sprite;
 import wanl.example.com.math.Rect;
 import wanl.example.com.pool.BulletPool;
 
-public class MainShip extends Sprite {
+public class MainShip extends Ship {
 
     private static final int INVALID_POINTER = -1;
 
     private final Vector2 v0 = new Vector2(0.5f, 0);
-    private Vector2 v = new Vector2();
     private boolean isPressedLeft;
     private boolean isPressedRight;
-    BulletPool bulletPool;
-    private TextureRegion bulletRegion;
-    private Rect worldBounds;
-    Sound sound = Gdx.audio.newSound(Gdx.files.internal("sound.mp3"));
     private int leftPointer = INVALID_POINTER;
     private int rigthPointer = INVALID_POINTER;
-    private float reloadInterval;
-    private float reloadTimer;
+
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
@@ -34,13 +25,17 @@ public class MainShip extends Sprite {
         setHeightProportion(0.15f);
         this.bulletPool = bulletPool;
         this.reloadInterval = 0.1f;
+        this.sound = Gdx.audio.newSound(Gdx.files.internal("sound.mp3"));
+        this.bulletV = new Vector2(0, 0.5f);
+        this.bulletHeight = 0.01f;
+        this.damage = 1;
+        this.hp = 100;
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         setBottom(worldBounds.getBottom() + 0.05f);
-        this.worldBounds = worldBounds;
     }
 
     @Override
@@ -114,12 +109,6 @@ public class MainShip extends Sprite {
         v.setZero();
     }
 
-    private void shoot() {
-        Bullet bullet = (Bullet) bulletPool.obtain();
-        bullet.set(this, bulletRegion, pos, new Vector2(0, 0.5f), 0.01f, worldBounds, 1);
-        sound.play();
-    }
-
     public boolean touchDragged(Vector2 touch, int pointer) {
         pos.set(touch.x, pos.y);
         return true;
@@ -159,7 +148,4 @@ public class MainShip extends Sprite {
         return super.touchUp(touch, pointer);
     }
 
-    public void dispose() {
-        sound.dispose();
-    }
 }
