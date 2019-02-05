@@ -153,9 +153,7 @@ public class GameScreen extends Base2dScreen {
             explosionPool.drawActiveSprites(batch);
             enemyPool.drawActiveSprites(batch);
         } else {
-            gameOver.pos.set(0, 0);
             gameOver.draw(batch);
-            newGame.pos.set(0, -0.3f);
             newGame.draw(batch);
         }
         batch.end();
