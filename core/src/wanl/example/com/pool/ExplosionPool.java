@@ -9,20 +9,19 @@ import wanl.example.com.base.Sprite;
 import wanl.example.com.base.SpritesPool;
 import wanl.example.com.sprites.game.Explosion;
 
-public class ExplosionPool extends SpritesPool {
+public class ExplosionPool extends SpritesPool<Explosion> {
 
-    TextureRegion region;
+    private TextureRegion region;
     private Sound explosionSound;
 
     public ExplosionPool(TextureAtlas atlas) {
-        region= atlas.findRegion("explosion");
-        explosionSound = Gdx.audio.newSound(Gdx.files.internal("explosion.mp3"));
+        this.region = atlas.findRegion("explosion");
+        this.explosionSound = Gdx.audio.newSound(Gdx.files.internal("explosion.mp3"));
     }
 
     @Override
-    protected Sprite newObject() {
+    protected Explosion newObject() {
         return new Explosion(region, 9, 9, 74, explosionSound);
-
     }
 
     public void dispose() {

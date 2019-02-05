@@ -4,9 +4,9 @@ import wanl.example.com.base.Sprite;
 import wanl.example.com.base.SpritesPool;
 import wanl.example.com.sprites.game.Bullet;
 
-public class BulletPool extends SpritesPool {
+public class BulletPool extends SpritesPool<Bullet> {
     @Override
-    protected Sprite newObject() {
+    protected Bullet newObject() {
         return new Bullet();
     }
 }

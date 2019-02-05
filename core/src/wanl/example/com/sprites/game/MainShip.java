@@ -7,29 +7,32 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import wanl.example.com.math.Rect;
 import wanl.example.com.pool.BulletPool;
+import wanl.example.com.pool.ExplosionPool;
 
 public class MainShip extends Ship {
 
     private static final int INVALID_POINTER = -1;
 
     private final Vector2 v0 = new Vector2(0.5f, 0);
+
     private boolean isPressedLeft;
     private boolean isPressedRight;
+
     private int leftPointer = INVALID_POINTER;
-    private int rigthPointer = INVALID_POINTER;
+    private int rightPointer = INVALID_POINTER;
 
-
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletRegion = atlas.findRegion("bulletMainShip");
-        setHeightProportion(0.15f);
         this.bulletPool = bulletPool;
-        this.reloadInterval = 0.1f;
-        this.sound = Gdx.audio.newSound(Gdx.files.internal("sound.mp3"));
+        this.explosionPool = explosionPool;
+        this.reloadInterval = 0.2f;
+        this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sound.mp3"));
+        setHeightProportion(0.15f);
         this.bulletV = new Vector2(0, 0.5f);
         this.bulletHeight = 0.01f;
         this.damage = 1;
-        this.hp = 100;
+        this.hp = 1;
     }
 
     @Override
@@ -39,10 +42,10 @@ public class MainShip extends Ship {
     }
 
     @Override
-    public void update(float deltatime) {
-        super.update(deltatime);
-        pos.mulAdd(v, deltatime);
-        reloadTimer += deltatime;
+    public void update(float delta) {
+        super.update(delta);
+        pos.mulAdd(v, delta);
+        reloadTimer += delta;
         if (reloadTimer >= reloadInterval) {
             reloadTimer = 0f;
             shoot();
@@ -97,6 +100,54 @@ public class MainShip extends Ship {
         return false;
     }
 
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer) {
+        if (touch.x < worldBounds.pos.x) {
+            if (leftPointer != INVALID_POINTER) return false;
+            leftPointer = pointer;
+            moveLeft();
+        } else {
+            if (rightPointer != INVALID_POINTER) return false;
+            rightPointer = pointer;
+            moveRight();
+        }
+        return super.touchDown(touch, pointer);
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer) {
+        if (pointer == leftPointer) {
+            leftPointer = INVALID_POINTER;
+            if (rightPointer != INVALID_POINTER) {
+                moveRight();
+            } else {
+                stop();
+            }
+        } else if (pointer == rightPointer) {
+            rightPointer = INVALID_POINTER;
+            if (leftPointer != INVALID_POINTER) {
+                moveLeft();
+            } else {
+                stop();
+            }
+        }
+        return super.touchUp(touch, pointer);
+    }
+
+    public boolean isBulletCollision(Rect bullet) {
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > pos.y
+                || bullet.getTop() < getBottom()
+        );
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        boom();
+    }
+
     private void moveRight() {
         v.set(v0);
     }
@@ -107,45 +158,6 @@ public class MainShip extends Ship {
 
     private void stop() {
         v.setZero();
-    }
-
-    public boolean touchDragged(Vector2 touch, int pointer) {
-        pos.set(touch.x, pos.y);
-        return true;
-    }
-
-    @Override
-    public boolean touchDown(Vector2 touch, int pointer) {
-        if (touch.x < worldBounds.pos.x) {
-            if (leftPointer != INVALID_POINTER) return false;
-            leftPointer = pointer;
-            moveLeft();
-        } else {
-            if (rigthPointer != INVALID_POINTER) return false;
-            rigthPointer = pointer;
-            moveRight();
-        }
-        return super.touchDown(touch, pointer);
-    }
-
-    @Override
-    public boolean touchUp(Vector2 touch, int pointer) {
-        if (pointer == leftPointer) {
-            leftPointer = INVALID_POINTER;
-            if (rigthPointer != INVALID_POINTER){
-                moveRight();
-            } else {
-                stop();
-            }
-        } else if (pointer == rigthPointer) {
-            rigthPointer = INVALID_POINTER;
-            if (leftPointer != INVALID_POINTER){
-                moveLeft();
-            } else {
-                stop();
-            }
-        }
-        return super.touchUp(touch, pointer);
     }
 
 }

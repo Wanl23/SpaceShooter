@@ -1,25 +1,19 @@
 package wanl.example.com.sprites.menu;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+
 import wanl.example.com.math.Rect;
 import wanl.example.com.screen.GameScreen;
 
-public class Play extends ScaledTouchUpButton {
+public class NewGame extends ScaledTouchUpButton {
 
     private Game game;
 
-    public Play(TextureAtlas atlas, Game game) {
-        super(atlas.findRegion("btPlay"));
+    public NewGame(TextureRegion region, Game game) {
+        super(region);
         this.game = game;
-        setHeightProportion(0.2f);
-    }
-
-    @Override
-    public void draw(SpriteBatch batch) {
-        super.draw(batch);
     }
 
     @Override
@@ -38,7 +32,7 @@ public class Play extends ScaledTouchUpButton {
 
     @Override
     public void resize(Rect worldBounds) {
-        setBottom(worldBounds.getBottom() + 0.05f);
-        setRight(worldBounds.getRight() - 0.05f);
+        pos.set(0, 0);
+        setHeightProportion(0.05f);
     }
 }
