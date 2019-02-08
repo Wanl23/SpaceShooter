@@ -24,7 +24,7 @@ public class Play extends ScaledTouchUpButton {
 
     @Override
     void action() {
-        game.setScreen(new GameScreen(game));
+        game.setScreen(new GameScreen());
     }
 
     public boolean touchDown(Vector2 touch, int pointer) {
