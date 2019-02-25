@@ -28,7 +28,7 @@ public class MenuScreen extends Base2dScreen {
     private Background background;
     private Star star[];
 
-    Music music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+
     private Play play;
     private Exit exit;
 
@@ -43,7 +43,6 @@ public class MenuScreen extends Base2dScreen {
         for (int i = 0; i < star.length; i++) {
             star[i] = new Star(atlas);
         }
-        music.play();
         play = new Play(atlas, game);
         exit = new Exit(atlas);
     }
