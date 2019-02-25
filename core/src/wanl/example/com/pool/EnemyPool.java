@@ -4,26 +4,34 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import wanl.example.com.base.SpritesPool;
+import wanl.example.com.math.Rect;
 import wanl.example.com.sprites.game.Enemy;
+import wanl.example.com.sprites.game.MainShip;
 
 public class EnemyPool extends SpritesPool<Enemy> {
 
-    protected Sound sound;
+    private Sound shootSound;
     private BulletPool bulletPool;
+    private Rect worldBounds;
+    private ExplosionPool explosionPool;
+    private MainShip mainShip;
 
-    public EnemyPool(BulletPool bulletPool) {
-        this.sound = Gdx.audio.newSound(Gdx.files.internal("sound.mp3"));
+    public EnemyPool(BulletPool bulletPool, Rect worldBounds, ExplosionPool explosionPool, MainShip mainShip) {
+        this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sound.mp3"));
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
+        this.worldBounds = worldBounds;
+        this.mainShip = mainShip;
     }
 
     @Override
     protected Enemy newObject() {
-        return new Enemy(sound, bulletPool);
+        return new Enemy(shootSound, bulletPool, explosionPool, worldBounds, mainShip);
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        sound.dispose();
+        shootSound.dispose();
     }
 }
